@@ -1,3 +1,5 @@
+let doisPlayers = prompt(`Quantos jogadores vão jogar? Responda com 1 ou 2`);
+
 // Variáveis da Bolinha
 let xBolinha = 300;
 let yBolinha = 200;
@@ -23,7 +25,7 @@ let aRaquete = 90;
 
 let colidiu = false;
 
-let doisPlayers = false;
+// let doisPlayers = false;
 
 let meusPontos = 0;
 let pontosOp = 0;
@@ -126,26 +128,9 @@ function movimentaMinhaRaquete() {
   yRaquete = constrain(yRaquete, 10, 310);
 }
 
-function movimentaOpRaquete() {
-  if (doisPlayers) {
-    if (keyIsDown(UP_ARROW)) {
-      yRaqueteOp -= 10;
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-      yRaqueteOp += 10;
-    }
-    yRaqueteOp = constrain(yRaqueteOp, 10, 310);
-  } else {
-    velocidadeYOp = yBolinha - yRaqueteOp - lRaquete / 2 - 30;
-    yRaqueteOp += velocidadeYOp + chanceDeErrar;
-    calculaChanceDeErrar();
-  }
-  yRaqueteOp = constrain(yRaqueteOp, 10, 310);
-}
-
 function calculaChanceDeErrar() {
   if (pontosOp >= meusPontos) {
-    chanceDeErrar += 1;
+    chanceDeErrar += 10;
     if (chanceDeErrar >= 39) {
       chanceDeErrar = 40;
     }
@@ -155,6 +140,26 @@ function calculaChanceDeErrar() {
       chanceDeErrar = 35;
     }
   }
+}
+
+function movimentaOpRaquete() {
+  if (doisPlayers === "2") {
+    if (keyIsDown(UP_ARROW)) {
+      yRaqueteOp -= 10;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      yRaqueteOp += 10;
+    }
+    yRaqueteOp = constrain(yRaqueteOp, 10, 310);
+  } else if (doisPlayers === "1") {
+    calculaChanceDeErrar();
+    velocidadeYOp = yBolinha - yRaqueteOp - lRaquete / 2 - 30;
+    yRaqueteOp += velocidadeYOp + chanceDeErrar;
+  } else {
+    alert(`Não entendi sua resposta. Vamos tentar novamente?`);
+    recarregarPagina();
+  }
+  yRaqueteOp = constrain(yRaqueteOp, 10, 310);
 }
 
 function verificaColisaoRaquete() {
@@ -203,11 +208,16 @@ function marcaPonto() {
   }
 }
 
+function recarregarPagina() {
+  window.location.reload();
+}
+
 function vitoria() {
   if (pontosOp === 10) {
-    fill(289);
+    alert(`O jogador 2 foi o vencedor! Parabéns!`);
+    recarregarPagina();
   } else if (meusPontos === 10) {
-    fill(289);
-    text(meusPontos, 321, 26);
+    alert(`O jogador 1 foi o vencedor! Parabéns!`);
+    recarregarPagina();
   }
 }
